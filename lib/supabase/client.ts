@@ -13,6 +13,33 @@ export function getSupabaseClient() {
   }
 
   supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
+
+  const { data, error } = await supabase.auth.api.createJWT({
+    role: 'authenticated', // Ensure your JWT has the correct role
+    permissions: ['storage.read', 'storage.write'] // Adjust as per your needs
+  });
+
+  if (error) {
+    console.error('Error generating token:', error);
+    return;
+  }
+
+  console.log('Generated Blob Read/Write Token:', data);
+
   return supabaseClient
 }
 
+
+// export async function getBlobReadWriteToken() {
+//   const { data, error } = await supabase.auth.api.createJWT({
+//     role: 'authenticated', // Ensure your JWT has the correct role
+//     permissions: ['storage.read', 'storage.write'] // Adjust as per your needs
+//   });
+
+//   if (error) {
+//     console.error('Error generating token:', error);
+//     return;
+//   }
+
+//   console.log('Generated Blob Read/Write Token:', data);
+// }
